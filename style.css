@@ -13,6 +13,13 @@ html, body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 0;
+    padding-left: 0;
+    box-sizing: border-box;
 }
 
 .game-header h1 {
@@ -20,7 +27,25 @@ html, body {
 }
 
 .game-header button {
-    /* Inherits general button styles, adjust if needed */
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #8f7a66;
+    color: #f9f6f2;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 1.2;
+    font-family: Arial, sans-serif;
+}
+
+.game-header button:hover {
+    background-color: #7f6a56;
 }
 
 .score-wrapper {
@@ -30,7 +55,7 @@ html, body {
 }
 
 .score-container {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     background-color: #bbada0;
     color: #f9f6f2;
@@ -53,6 +78,7 @@ html, body {
     grid-gap: 10px;
     background-color: #bbada0;
     padding: 10px;
+    padding-right: 10px;
     border-radius: 5px;
     aspect-ratio: 1/1;
     width: 100%;
@@ -61,6 +87,7 @@ html, body {
     touch-action: none; /* Disables all browser touch actions on the grid */
     -webkit-user-select: none; /* Prevents text selection during swipes */
     user-select: none;
+    box-sizing: border-box;
 }
 
 .cell {
@@ -190,6 +217,7 @@ button:hover:not(:disabled) {
 
     .game-header {
         margin-bottom: 10px;
+        padding-right: 6px;
     }
 
     .game-header h1 {
@@ -197,8 +225,9 @@ button:hover:not(:disabled) {
     }
 
     .game-header button {
-        padding: 6px 10px;
-        font-size: 13px;
+        font-size: 20px;
+        width: 60px;
+        height: 60px;
     }
 
     .score-wrapper {
@@ -206,7 +235,7 @@ button:hover:not(:disabled) {
     }
 
     .score-container {
-        font-size: 16px;
+        font-size: 20px;
         padding: 4px 10px;
     }
 
@@ -228,6 +257,7 @@ button:hover:not(:disabled) {
     .grid {
         grid-gap: 6px;
         padding: 6px;
+        padding-right: 6px;
     }
 
     .cell {
@@ -269,4 +299,25 @@ button:hover:not(:disabled) {
     .cell[data-value="65536"] {
         font-size: 14px;
     }
+
+    .title-tile {
+        font-size: 24px;
+        width: 60px;
+        height: 60px;
+    }
+}
+
+.title-tile {
+    font-size: 32px;
+    font-weight: bold;
+    background-color: #edc22e;
+    color: #f9f6f2;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Make it square */
+    width: 80px;
+    height: 80px;
+    aspect-ratio: 1/1;
 } 
