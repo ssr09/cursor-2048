@@ -1,7 +1,27 @@
 let grid = [];
 let score = 0;
+let isSoundEnabled = true;
+let undoStates = [];
+let undosRemaining = 3;
 
-function initializeGrid() {
+// Update the sounds object with more pleasant sound effects
+const sounds = {
+    // Soft click sound for movement
+    move: new Audio('https://assets.mixkit.co/active_storage/sfx/2945/2945-preview.mp3'),
+    // Pleasant pop sound for merging
+    merge: new Audio('https://assets.mixkit.co/active_storage/sfx/2945/2945-preview.mp3'),
+    // Gentle chord for game over
+    gameOver: new Audio('https://assets.mixkit.co/active_storage/sfx/213/213-preview.mp3'),
+    // Add new startup sound - a pleasant chime
+    startup: new Audio('https://assets.mixkit.co/active_storage/sfx/2920/2920-preview.mp3')
+};
+
+// Add volume adjustment to make sounds more subtle
+Object.values(sounds).forEach(sound => {
+    sound.volume = 0.3; // Reduce volume to 30%
+});
+
+function initializeGrid(playStartup = false) {
     const gridElement = document.querySelector('.grid');
     gridElement.innerHTML = '';
     grid = Array(4).fill().map(() => Array(4).fill(0));
@@ -13,10 +33,17 @@ function initializeGrid() {
         gridElement.appendChild(cell);
     }
     
-    // Add initial tiles
-    addNewTile();
-    addNewTile();
-    updateDisplay();
+    // Play startup sound only if explicitly requested
+    if (playStartup && isSoundEnabled) {
+        playSound('startup');
+    }
+    
+    // Add initial tiles with a slight delay for the sound to be heard
+    setTimeout(() => {
+        addNewTile();
+        addNewTile();
+        updateDisplay();
+    }, 200);
 }
 
 function addNewTile() {
@@ -32,6 +59,12 @@ function addNewTile() {
     if (emptyCells.length > 0) {
         const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         grid[randomCell.x][randomCell.y] = Math.random() < 0.9 ? 2 : 4;
+        
+        // Add animation class to new tile
+        const cells = document.querySelectorAll('.cell');
+        const cell = cells[randomCell.x * 4 + randomCell.y];
+        cell.classList.add('cell-new');
+        setTimeout(() => cell.classList.remove('cell-new'), 200);
     }
 }
 
@@ -41,16 +74,25 @@ function updateDisplay() {
         for (let j = 0; j < 4; j++) {
             const value = grid[i][j];
             const cell = cells[i * 4 + j];
+            const previousValue = cell.getAttribute('data-value');
+            
             cell.textContent = value || '';
             cell.setAttribute('data-value', value);
+            
+            // Add merge animation if value doubled
+            if (value && previousValue && value === 2 * parseInt(previousValue)) {
+                cell.classList.add('cell-merged');
+                playSound('merge');
+                setTimeout(() => cell.classList.remove('cell-merged'), 200);
+            }
         }
     }
     document.getElementById('score').textContent = score;
 }
 
 function move(direction) {
-    // Create a deep copy of the grid to check if anything moved
     const previousGrid = JSON.parse(JSON.stringify(grid));
+    saveState();
     let moved = false;
     
     // Helper function to handle a single row or column
@@ -105,15 +147,16 @@ function move(direction) {
     // Check if the grid changed
     moved = JSON.stringify(previousGrid) !== JSON.stringify(grid);
     
-    // Add a new tile and update display if something moved
+    // After movement logic, add these changes:
     if (moved) {
+        playSound('move');
         addNewTile();
         updateDisplay();
     }
     
-    // Check for game over
     if (isGameOver()) {
         setTimeout(() => {
+            playSound('gameOver');
             alert('Game Over! Your score: ' + score);
         }, 100);
     }
@@ -144,15 +187,73 @@ function isGameOver() {
 
 function resetGame() {
     score = 0;
-    initializeGrid();
+    undoStates = [];
+    undosRemaining = 3;
+    const undoButton = document.getElementById('undoButton');
+    undoButton.textContent = `Undo (${undosRemaining})`;
+    undoButton.disabled = false;
+    initializeGrid(true);
 }
 
-// Initialize game
-document.addEventListener('keydown', (e) => {
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-        e.preventDefault();
-        move(e.key);
+// Add undo functionality
+function saveState() {
+    if (undosRemaining > 0) {
+        undoStates.push({
+            grid: JSON.parse(JSON.stringify(grid)),
+            score: score
+        });
     }
-});
+}
 
-initializeGrid(); 
+function undo() {
+    if (undosRemaining > 0 && undoStates.length > 0) {
+        const previousState = undoStates.pop();
+        grid = previousState.grid;
+        score = previousState.score;
+        undosRemaining--;
+        
+        // Update undo button
+        const undoButton = document.getElementById('undoButton');
+        undoButton.textContent = `Undo (${undosRemaining})`;
+        if (undosRemaining === 0) {
+            undoButton.disabled = true;
+        }
+        
+        updateDisplay();
+    }
+}
+
+// Sound control functions
+function toggleSound() {
+    isSoundEnabled = !isSoundEnabled;
+    const soundButton = document.getElementById('soundToggle');
+    soundButton.textContent = isSoundEnabled ? '🔊' : '🔈';
+}
+
+function playSound(soundName) {
+    if (isSoundEnabled && sounds[soundName]) {
+        sounds[soundName].currentTime = 0;
+        sounds[soundName].play();
+    }
+}
+
+// Modify the initialization at the bottom of the file
+document.addEventListener('DOMContentLoaded', () => {
+    // Play startup sound first
+    if (isSoundEnabled) {
+        playSound('startup');
+    }
+    
+    // Initialize the game with a slight delay
+    setTimeout(() => {
+        initializeGrid();
+    }, 200);
+    
+    // Add keyboard event listener
+    document.addEventListener('keydown', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            e.preventDefault();
+            move(e.key);
+        }
+    });
+}); 

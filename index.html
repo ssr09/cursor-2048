@@ -10,9 +10,13 @@
 <body>
     <div class="container">
         <h1>2048</h1>
-        <div class="score-container">Score: <span id="score">0</span></div>
+        <div class="controls">
+            <div class="score-container">Score: <span id="score">0</span></div>
+            <button id="soundToggle" onclick="toggleSound()">🔊</button>
+            <button id="undoButton" onclick="undo()">Undo (3)</button>
+            <button onclick="resetGame()">New Game</button>
+        </div>
         <div class="grid"></div>
-        <button onclick="resetGame()">New Game</button>
     </div>
     <script src="script.js"></script>
 </body>
