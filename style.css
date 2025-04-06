@@ -1,3 +1,8 @@
+html, body {
+    overscroll-behavior: none; /* Prevents bounce/scroll effects */
+    touch-action: manipulation; /* Improves touch response, disables double-tap zoom */
+}
+
 .container {
     width: 400px;
     margin: 20px auto;
@@ -53,6 +58,9 @@
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
+    touch-action: none; /* Disables all browser touch actions on the grid */
+    -webkit-user-select: none; /* Prevents text selection during swipes */
+    user-select: none;
 }
 
 .cell {

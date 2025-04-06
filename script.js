@@ -239,6 +239,81 @@ function playSound(soundName) {
     }
 }
 
+// Variables to track if we're currently handling a grid touch
+let touchInProgress = false;
+
+// Function to prevent page scrolling during grid interaction
+function preventScroll(e) {
+    if (touchInProgress) {
+        e.preventDefault();
+    }
+}
+
+// Add a global touch handler to prevent scrolling during grid touches
+document.addEventListener('touchmove', preventScroll, { passive: false });
+
+// Add touch controls for mobile
+const gridElement = document.querySelector('.grid');
+
+gridElement.addEventListener('touchstart', function(e) {
+    touchInProgress = true;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+    e.preventDefault();
+    e.stopPropagation();
+}, { passive: false });
+
+gridElement.addEventListener('touchmove', function(e) {
+    if (touchInProgress) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+}, { passive: false });
+
+gridElement.addEventListener('touchend', function(e) {
+    if (touchInProgress) {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+        e.preventDefault();
+        e.stopPropagation();
+        touchInProgress = false;
+    }
+}, { passive: false });
+
+gridElement.addEventListener('touchcancel', function(e) {
+    touchInProgress = false;
+}, { passive: false });
+
+function handleSwipe() {
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    
+    // Minimum distance for a swipe
+    const minSwipeDistance = 30;
+    
+    // Determine if horizontal or vertical swipe
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal swipe
+        if (Math.abs(deltaX) > minSwipeDistance) {
+            if (deltaX > 0) {
+                move('ArrowRight');
+            } else {
+                move('ArrowLeft');
+            }
+        }
+    } else {
+        // Vertical swipe
+        if (Math.abs(deltaY) > minSwipeDistance) {
+            if (deltaY > 0) {
+                move('ArrowDown');
+            } else {
+                move('ArrowUp');
+            }
+        }
+    }
+}
+
 // Modify the initialization at the bottom of the file
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize the game with a slight delay, but don't play startup sound here
@@ -253,57 +328,4 @@ document.addEventListener('DOMContentLoaded', () => {
             move(e.key);
         }
     });
-    
-    // Add touch controls for mobile
-    const gridElement = document.querySelector('.grid');
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-    
-    gridElement.addEventListener('touchstart', function(e) {
-        e.preventDefault(); // Prevent default scrolling
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
-    }, { passive: false }); // Important: passive: false allows preventDefault to work
-    
-    gridElement.addEventListener('touchmove', function(e) {
-        e.preventDefault(); // Prevent scrolling during move
-    }, { passive: false });
-    
-    gridElement.addEventListener('touchend', function(e) {
-        e.preventDefault(); // Prevent any default behavior
-        touchEndX = e.changedTouches[0].screenX;
-        touchEndY = e.changedTouches[0].screenY;
-        handleSwipe();
-    }, { passive: false });
-    
-    function handleSwipe() {
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-        
-        // Minimum distance for a swipe
-        const minSwipeDistance = 30;
-        
-        // Determine if horizontal or vertical swipe
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            // Horizontal swipe
-            if (Math.abs(deltaX) > minSwipeDistance) {
-                if (deltaX > 0) {
-                    move('ArrowRight');
-                } else {
-                    move('ArrowLeft');
-                }
-            }
-        } else {
-            // Vertical swipe
-            if (Math.abs(deltaY) > minSwipeDistance) {
-                if (deltaY > 0) {
-                    move('ArrowDown');
-                } else {
-                    move('ArrowUp');
-                }
-            }
-        }
-    }
 }); 
