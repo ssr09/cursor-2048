@@ -9,7 +9,7 @@ const sounds = {
     // Soft click sound for movement
     move: new Audio('https://assets.mixkit.co/active_storage/sfx/2945/2945-preview.mp3'),
     // Pleasant pop sound for merging
-    merge: new Audio('https://assets.mixkit.co/active_storage/sfx/2945/2945-preview.mp3'),
+    merge: new Audio(),
     // Gentle chord for game over
     gameOver: new Audio('https://assets.mixkit.co/active_storage/sfx/213/213-preview.mp3'),
     // Add new startup sound - a pleasant chime
