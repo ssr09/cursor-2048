@@ -18,7 +18,10 @@
         </div>
         <div class="grid"></div>
         <div class="game-controls">
-            <button id="soundToggle" onclick="toggleSound()">🔊</button>
+            <button id="soundToggle" onclick="toggleSound()">
+                <span class="sound-icon sound-on">🔊</span>
+                <span class="sound-icon sound-off">🔇</span>
+            </button>
             <button id="undoButton" onclick="undo()">
                 <span class="undo-icon">↩️</span>
                 <span class="undo-count" id="undoCount">3</span>

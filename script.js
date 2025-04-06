@@ -3,6 +3,7 @@ let score = 0;
 let isSoundEnabled = true;
 let undoStates = [];
 let undosRemaining = 3;
+let audioInitialized = false;
 
 // Update the sounds object with more pleasant sound effects
 const sounds = {
@@ -229,13 +230,48 @@ function undo() {
 function toggleSound() {
     isSoundEnabled = !isSoundEnabled;
     const soundButton = document.getElementById('soundToggle');
-    soundButton.textContent = isSoundEnabled ? '🔊' : '🔈';
+    
+    // Use a data attribute for CSS styling
+    soundButton.setAttribute('data-sound-enabled', isSoundEnabled);
+    
+    // No need to change text content as we're using separate spans
+}
+
+function initializeAudio() {
+    if (!audioInitialized) {
+        // Create a context if possible
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+            const audioCtx = new AudioContext();
+            // Just creating the context is enough to enable audio
+        }
+        
+        // Load sounds explicitly (needed for iOS)
+        Object.values(sounds).forEach(sound => {
+            // A tiny silent sound
+            sound.play().then(() => {
+                sound.pause();
+                sound.currentTime = 0;
+            }).catch(e => {
+                // Ignore errors - this is just a warm-up
+            });
+        });
+        
+        audioInitialized = true;
+    }
 }
 
 function playSound(soundName) {
     if (isSoundEnabled && sounds[soundName]) {
+        // Try to initialize audio first
+        initializeAudio();
+        
+        // Now try to play the sound
         sounds[soundName].currentTime = 0;
-        sounds[soundName].play();
+        sounds[soundName].play().catch(e => {
+            // Silently catch errors, as sound is not critical
+            console.log("Unable to play sound: " + soundName);
+        });
     }
 }
 
@@ -328,4 +364,12 @@ document.addEventListener('DOMContentLoaded', () => {
             move(e.key);
         }
     });
+    
+    // Add these event listeners for first interaction
+    document.addEventListener('click', initializeAudio, { once: true });
+    document.addEventListener('touchstart', initializeAudio, { once: true });
+    
+    // Initialize sound button state when page loads
+    const soundButton = document.getElementById('soundToggle');
+    soundButton.setAttribute('data-sound-enabled', isSoundEnabled);
 }); 

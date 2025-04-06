@@ -125,9 +125,27 @@ button:hover:not(:disabled) {
 #soundToggle {
     width: auto;
     height: auto;
-    padding: 8px 10px;
-    font-size: 20px;
+    padding: 8px 15px;
+    font-size: 22px;
     line-height: 1;
+    position: relative;
+}
+
+.sound-icon {
+    display: block;
+}
+
+.sound-off {
+    display: none;
+    color: #e74c3c; /* Red tint for off state */
+}
+
+#soundToggle[data-sound-enabled="false"] .sound-on {
+    display: none;
+}
+
+#soundToggle[data-sound-enabled="false"] .sound-off {
+    display: block;
 }
 
 #undoButton {
