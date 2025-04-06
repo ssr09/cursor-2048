@@ -1,7 +1,44 @@
 .container {
     width: 400px;
-    margin: 0 auto;
-    text-align: center;
+    margin: 20px auto;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.game-header h1 {
+    margin: 0;
+}
+
+.game-header button {
+    /* Inherits general button styles, adjust if needed */
+}
+
+.score-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.score-container {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #bbada0;
+    color: #f9f6f2;
+    padding: 5px 15px;
+    border-radius: 3px;
+}
+
+.game-controls {
+    margin-top: 20px;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 .grid {
@@ -11,7 +48,6 @@
     background-color: #bbada0;
     padding: 10px;
     border-radius: 5px;
-    margin: 20px 0;
 }
 
 .cell {
@@ -40,20 +76,19 @@
 .cell[data-value="2048"] { background-color: #edc22e; color: #f9f6f2; }
 
 button {
-    padding: 10px 20px;
+    padding: 8px 15px;
     background-color: #8f7a66;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
     font-size: 16px;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background-color: #7f6a56;
 }
 
-/* Add animations */
 @keyframes appear {
     0% { transform: scale(0); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
@@ -73,29 +108,36 @@ button:hover {
     animation: merge 0.2s ease-in-out;
 }
 
-/* Control styles */
-.controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    align-items: center;
-}
-
 #soundToggle {
-    width: 40px;
-    height: 40px;
-    padding: 5px;
+    width: auto;
+    height: auto;
+    padding: 8px 10px;
     font-size: 20px;
+    line-height: 1;
 }
 
 #undoButton {
-    padding: 8px 16px;
-    border-radius: 5px;
-    border: none;
-    background-color: #8f7a66;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 15px;
+}
+
+.undo-icon {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.undo-count {
+    background-color: #f65e3b;
     color: white;
-    cursor: pointer;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 14px;
+    position: absolute;
+    top: -5px;
+    right: -5px;
 }
 
 #undoButton:disabled {
@@ -107,8 +149,69 @@ button:hover {
     background-color: #7f6a56;
 }
 
-.score-container {
-    font-size: 20px;
-    font-weight: bold;
-    margin-right: 20px;
+/* --- Mobile Optimizations --- */
+@media (max-width: 480px) {
+    .container {
+        width: 95%;
+        margin: 10px auto;
+    }
+
+    .game-header {
+        margin-bottom: 10px;
+    }
+
+    .game-header h1 {
+        font-size: 1.8em;
+    }
+
+    .game-header button {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .score-wrapper {
+        margin-bottom: 10px;
+    }
+
+    .score-container {
+        font-size: 16px;
+        padding: 4px 10px;
+    }
+
+    .game-controls {
+        gap: 8px;
+        margin-top: 15px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    #soundToggle {
+        padding: 6px 8px;
+        font-size: 18px;
+    }
+
+    .grid {
+        padding: 8px;
+        grid-gap: 8px;
+        border-radius: 4px;
+    }
+
+    .cell {
+        width: 60px;
+        height: 60px;
+        font-size: 18px;
+        border-radius: 4px;
+    }
+
+    .cell[data-value="1024"],
+    .cell[data-value="2048"] {
+        font-size: 16px;
+    }
+    .cell[data-value="4096"],
+    .cell[data-value="8192"] {
+        font-size: 14px;
+    }
 } 

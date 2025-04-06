@@ -9,14 +9,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>2048</h1>
-        <div class="controls">
-            <div class="score-container">Score: <span id="score">0</span></div>
-            <button id="soundToggle" onclick="toggleSound()">🔊</button>
-            <button id="undoButton" onclick="undo()">Undo (3)</button>
+        <div class="game-header">
+            <h1>2048</h1>
             <button onclick="resetGame()">New Game</button>
         </div>
+        <div class="score-wrapper">
+            <div class="score-container">Score: <span id="score">0</span></div>
+        </div>
         <div class="grid"></div>
+        <div class="game-controls">
+            <button id="soundToggle" onclick="toggleSound()">🔊</button>
+            <button id="undoButton" onclick="undo()">
+                <span class="undo-icon">↩️</span>
+                <span class="undo-count" id="undoCount">3</span>
+            </button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

@@ -212,10 +212,12 @@ function undo() {
         score = previousState.score;
         undosRemaining--;
         
-        // Update undo button
-        const undoButton = document.getElementById('undoButton');
-        undoButton.textContent = `Undo (${undosRemaining})`;
+        // Update undo button count
+        const undoCount = document.getElementById('undoCount');
+        undoCount.textContent = undosRemaining;
+        
         if (undosRemaining === 0) {
+            const undoButton = document.getElementById('undoButton');
             undoButton.disabled = true;
         }
         
@@ -239,14 +241,9 @@ function playSound(soundName) {
 
 // Modify the initialization at the bottom of the file
 document.addEventListener('DOMContentLoaded', () => {
-    // Play startup sound first
-    if (isSoundEnabled) {
-        playSound('startup');
-    }
-    
-    // Initialize the game with a slight delay
+    // Initialize the game with a slight delay, but don't play startup sound here
     setTimeout(() => {
-        initializeGrid();
+        initializeGrid(false); // Pass false here to prevent startup sound on initial load
     }, 200);
     
     // Add keyboard event listener
