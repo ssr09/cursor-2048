@@ -84,6 +84,7 @@ function updateDisplay() {
             if (value && previousValue && value === 2 * parseInt(previousValue)) {
                 cell.classList.add('cell-merged');
                 playSound('merge');
+                triggerHaptic('merge');
                 setTimeout(() => cell.classList.remove('cell-merged'), 200);
             }
         }
@@ -151,6 +152,7 @@ function move(direction) {
     // After movement logic, add these changes:
     if (moved) {
         playSound('move');
+        triggerHaptic('move');
         addNewTile();
         updateDisplay();
     }
@@ -158,6 +160,7 @@ function move(direction) {
     if (isGameOver()) {
         setTimeout(() => {
             playSound('gameOver');
+            triggerHaptic('gameOver');
             alert('Game Over! Your score: ' + score);
         }, 100);
     }
@@ -372,4 +375,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize sound button state when page loads
     const soundButton = document.getElementById('soundToggle');
     soundButton.setAttribute('data-sound-enabled', isSoundEnabled);
-}); 
+});
+
+// Add this function after the playSound function
+function triggerHaptic(type) {
+    // Check if vibration is supported and sounds are enabled
+    if (isSoundEnabled && 'vibrate' in navigator) {
+        switch(type) {
+            case 'move':
+            case 'merge':
+                // Same short, gentle vibration for both moves and merges
+                navigator.vibrate(15);
+                break;
+            case 'gameOver':
+                // Pattern vibration for game over
+                navigator.vibrate([50, 50, 50]);
+                break;
+            default:
+                // Fallback short vibration
+                navigator.vibrate(15);
+        }
+    }
+} 
