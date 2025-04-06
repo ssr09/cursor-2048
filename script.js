@@ -253,4 +253,51 @@ document.addEventListener('DOMContentLoaded', () => {
             move(e.key);
         }
     });
+    
+    // Add touch controls for mobile
+    const gridElement = document.querySelector('.grid');
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    
+    gridElement.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, false);
+    
+    gridElement.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+    }, false);
+    
+    function handleSwipe() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // Minimum distance for a swipe
+        const minSwipeDistance = 30;
+        
+        // Determine if horizontal or vertical swipe
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Horizontal swipe
+            if (Math.abs(deltaX) > minSwipeDistance) {
+                if (deltaX > 0) {
+                    move('ArrowRight');
+                } else {
+                    move('ArrowLeft');
+                }
+            }
+        } else {
+            // Vertical swipe
+            if (Math.abs(deltaY) > minSwipeDistance) {
+                if (deltaY > 0) {
+                    move('ArrowDown');
+                } else {
+                    move('ArrowUp');
+                }
+            }
+        }
+    }
 }); 
