@@ -193,8 +193,14 @@ function resetGame() {
     score = 0;
     undoStates = [];
     undosRemaining = 3;
+    
+    // Update the undo button correctly
     const undoButton = document.getElementById('undoButton');
-    undoButton.textContent = `Undo (${undosRemaining})`;
+    const undoCount = document.getElementById('undoCount');
+    
+    // Update just the count span, not the entire button text
+    undoCount.textContent = undosRemaining;
+    
     undoButton.disabled = false;
     initializeGrid(true);
 }

@@ -231,16 +231,42 @@ button:hover:not(:disabled) {
     }
 
     .cell {
-        font-size: 18px;
+        font-size: 22px;
         border-radius: 4px;
+        font-weight: 700;
+    }
+
+    .cell[data-value="2"],
+    .cell[data-value="4"],
+    .cell[data-value="8"] {
+        font-size: 24px;
+    }
+
+    .cell[data-value="16"],
+    .cell[data-value="32"],
+    .cell[data-value="64"] {
+        font-size: 22px;
+    }
+
+    .cell[data-value="128"],
+    .cell[data-value="256"],
+    .cell[data-value="512"] {
+        font-size: 20px;
     }
 
     .cell[data-value="1024"],
     .cell[data-value="2048"] {
-        font-size: 16px;
+        font-size: 18px;
     }
+
     .cell[data-value="4096"],
     .cell[data-value="8192"] {
+        font-size: 16px;
+    }
+
+    .cell[data-value="16384"],
+    .cell[data-value="32768"],
+    .cell[data-value="65536"] {
         font-size: 14px;
     }
 } 
