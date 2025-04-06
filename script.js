@@ -262,15 +262,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let touchEndY = 0;
     
     gridElement.addEventListener('touchstart', function(e) {
+        e.preventDefault(); // Prevent default scrolling
         touchStartX = e.changedTouches[0].screenX;
         touchStartY = e.changedTouches[0].screenY;
-    }, false);
+    }, { passive: false }); // Important: passive: false allows preventDefault to work
+    
+    gridElement.addEventListener('touchmove', function(e) {
+        e.preventDefault(); // Prevent scrolling during move
+    }, { passive: false });
     
     gridElement.addEventListener('touchend', function(e) {
+        e.preventDefault(); // Prevent any default behavior
         touchEndX = e.changedTouches[0].screenX;
         touchEndY = e.changedTouches[0].screenY;
         handleSwipe();
-    }, false);
+    }, { passive: false });
     
     function handleSwipe() {
         const deltaX = touchEndX - touchStartX;
